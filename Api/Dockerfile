@@ -53,4 +53,4 @@ RUN chmod +x /usr/bin/wait-for-it
 ENV RUN_MIGRATIONS=false
 
 # Run key generation, wait for the database before running migrations, and set RUN_MIGRATIONS to true
-CMD bash -c 'php artisan key:generate && wait-for-it -t 60 database:3306 -- bash -c "if [ \"$RUN_MIGRATIONS\" = false ]; then php artisan migrate:fresh --seed --force && export RUN_MIGRATIONS=true; fi" && php artisan serve --host 0.0.0.0 --port 8000'
+CMD bash -c 'php artisan key:generate && wait-for-it -t 60 database:3306 -- bash -c "if [ \"$RUN_MIGRATIONS\" = false ]; then php artisan migrate:fresh --seed --force && export RUN_MIGRATIONS=true; fi" && php artisan serve --host 0.0.0.0 --port 8001'
