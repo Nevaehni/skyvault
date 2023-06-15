@@ -43,7 +43,7 @@ RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 COPY ./000-default.conf /etc/apache2/sites-available/000-default.conf
 
 # Expose port 8000
-EXPOSE 8000
+EXPOSE 8001
 
 # Add wait-for-it script to the container
 ADD https://github.com/vishnubob/wait-for-it/raw/master/wait-for-it.sh /usr/bin/wait-for-it
