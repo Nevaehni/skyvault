@@ -10,18 +10,22 @@ COPY . .
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get upgrade -y \
+    && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
     libonig-dev \
     libxml2-dev \
     zip \
     unzip \
-    ghostscript \
     libmagickwand-dev --no-install-recommends \
-    ghostscript --no-install-recommends \
+    fonts-dejavu-core \
+    fontconfig \
     && pecl install imagick \
     && docker-php-ext-enable imagick
+
+# Install Ghostscript
+RUN apt-get install -y ghostscript
 
 # Install PHP extensions
 RUN apt-get install -y \
