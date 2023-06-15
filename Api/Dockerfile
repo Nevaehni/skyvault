@@ -10,8 +10,7 @@ COPY . .
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Install system dependencies
-RUN apt-get update && apt-get upgrade -y \
-    && apt-get install -y \
+RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
     libonig-dev \
@@ -20,12 +19,21 @@ RUN apt-get update && apt-get upgrade -y \
     unzip \
     libmagickwand-dev --no-install-recommends \
     fonts-dejavu-core \
-    fontconfig \
-    && pecl install imagick \
-    && docker-php-ext-enable imagick
+    fontconfig
 
-# Install Ghostscript
-RUN apt-get install -y ghostscript
+# Download and install Ghostscript 9.27
+RUN wget https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs927/ghostscript-9.27.tar.gz \
+    && tar xzf ghostscript-9.27.tar.gz \
+    && cd ghostscript-9.27 \
+    && ./configure \
+    && make \
+    && make install \
+    && cd .. \
+    && rm -rf ghostscript-9.27
+
+# Download and install Imagick 3.4.3
+RUN pecl install imagick-3.4.3 \
+    && docker-php-ext-enable imagick
 
 # Install PHP extensions
 RUN apt-get install -y \
@@ -40,7 +48,10 @@ RUN a2enmod rewrite
 RUN composer install --no-interaction --no-scripts --no-suggest --optimize-autoloader
 
 # Set file permissions
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chown -R www-data:Continuing with the Dockerfile:
+
+```dockerfile
+www-data /var/www/html/storage /var/www/html/bootstrap/cache
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Set up Apache configuration
