@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+    laravel-api:
+        build:
+            context: ./Api
+            dockerfile: Dockerfile
+        ports:
+            - 8000:8000
+        networks:
+            - app-network
+        depends_on:
+            - database
+
+    nextjs-frontend:
+        build:
+            context: ./Nextjs
+            dockerfile: Dockerfile
+        ports:
+            - 3000:3000
+        depends_on:
+            - laravel-api
+
+    database:
+        image: mysql:8.0
+        ports:
+            - 3306:3306
+        environment:
+            MYSQL_ROOT_USER: root
+            MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+            MYSQL_DATABASE: skyvault
+        networks:
+            - app-network
+
+networks:
+    app-network:
+        driver: bridge
