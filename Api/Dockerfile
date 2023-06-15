@@ -48,10 +48,7 @@ RUN a2enmod rewrite
 RUN composer install --no-interaction --no-scripts --no-suggest --optimize-autoloader
 
 # Set file permissions
-RUN chown -R www-data:Continuing with the Dockerfile:
-
-```dockerfile
-www-data /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Set up Apache configuration
