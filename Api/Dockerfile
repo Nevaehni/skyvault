@@ -17,22 +17,9 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     zip \
     unzip \
+    ghostscript \
     libmagickwand-dev --no-install-recommends \
-    fonts-dejavu-core \
-    fontconfig
-
-# Download and install Ghostscript 9.27
-RUN wget https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs927/ghostscript-9.27.tar.gz \
-    && tar xzf ghostscript-9.27.tar.gz \
-    && cd ghostscript-9.27 \
-    && ./configure \
-    && make \
-    && make install \
-    && cd .. \
-    && rm -rf ghostscript-9.27
-
-# Download and install Imagick 3.4.3
-RUN pecl install imagick-3.4.3 \
+    && pecl install imagick \
     && docker-php-ext-enable imagick
 
 # Install PHP extensions
