@@ -19,6 +19,7 @@ RUN apt-get update && apt-get install -y \
     unzip \
     ghostscript \
     libmagickwand-dev --no-install-recommends \
+    ghostscript --no-install-recommends \
     && pecl install imagick \
     && docker-php-ext-enable imagick
 
@@ -41,7 +42,7 @@ RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 # Set up Apache configuration
 COPY ./000-default.conf /etc/apache2/sites-available/000-default.conf
 
-# Expose port 8000
+# Expose port 8001
 EXPOSE 8001
 
 # Add wait-for-it script to the container

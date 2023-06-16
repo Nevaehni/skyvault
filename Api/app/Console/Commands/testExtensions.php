@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Imagick;
+use Mockery\Exception;
 
 class testExtensions extends Command
 {
@@ -34,16 +35,20 @@ class testExtensions extends Command
 
     public function handle()
     {
-        // Test ImageMagick
-        $image = new Imagick();
-        $image->newImage(100, 100, 'white');
-        $image->setImageFormat("png");
-        $image->writeImage(storage_path('app/public/ImageMagick_image.png'));
-        echo "ImageMagick is working!";
+        try {
+            // Test ImageMagick
+            $image = new Imagick();
+            $image->newImage(100, 100, 'white');
+            $image->setImageFormat("png");
+            $image->writeImage(storage_path('app/public/ImageMagick_image.png'));
+            echo "ImageMagick is working!";
 
-        // Test Ghostscript
-        $pdfPath = storage_path('app/public/test_pdf.pdf');
-        exec("gs -q -dNOPAUSE -sDEVICE=png16m -r300 -sOutputFile=" . storage_path('app/public/Ghostscript_image.png') . " " . $pdfPath);
-        echo "Ghostscript is working!";
+            // Test Ghostscript
+            $pdfPath = storage_path('app/public/test_pdf.pdf');
+            exec("gs -q -dNOPAUSE -sDEVICE=png16m -r300 -sOutputFile=" . storage_path('app/public/Ghostscript_image.png') . " " . $pdfPath);
+            echo "Ghostscript is working!";
+        } catch (Exception $e){
+            dd($e);
+        }
     }
 }
