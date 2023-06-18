@@ -73,8 +73,9 @@ class FileControllerTest extends TestCase
     public function testStoreReturnsErrorResponseOnException()
     {
         $file = UploadedFile::fake()->image("image.jpg");
-        $fileData = ['files' => [$file]];
-        $request = Request::create('/files', 'POST', $fileData);
+        $request = new Request();
+        $request->files->add(['files' => [$file]]);
+        $request->setMethod('POST');
         $request->setUserResolver(function () {
             return $this->user;
         });
@@ -93,6 +94,7 @@ class FileControllerTest extends TestCase
         $this->assertEquals(500, $response->getStatusCode());
         $this->assertEquals('An error occurred while processing your request', $response->getData(true)['message']);
     }
+
 
     public function testShowReturnsDownloadResponse()
     {
