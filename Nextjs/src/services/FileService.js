@@ -42,6 +42,27 @@ class FileService {
     static async searchFiles(searchTerm) {
         return await axios.get(`/api/search/${searchTerm}`)
     }
+
+    // Admin Dashboard
+    static async getAllUsers() {
+        return await axios.get('/api/users')
+    }
+
+    static async getCurrentUser() {
+        return await axios.get('/api/user');
+    }
+
+    static async createUser(userData) {
+        return await axios.post('/api/users', userData);
+    }
+
+    static async updateUser(id, userData) {
+        return await axios.patch(`/api/users/${id}`, userData);
+    }
+
+    static async deleteUser(id) {
+        return await axios.delete(`/api/users/${id}`);
+    }
 }
 
 export default FileService

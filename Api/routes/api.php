@@ -5,6 +5,8 @@ use App\Http\Controllers\FolderController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ShareController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\FilterMediaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -58,9 +60,16 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     //Search routes
     Route::get('/search/{searchTerm}', [SearchController::class, 'index']);
+
+    // Filter Route
+    Route::get('/filter', [FilterMediaController::class, 'getFilteredData']);
+
+    Route::middleware(['isAdmin'])->group(function () {
+        // User routes
+        Route::get('/users', [UserController::class, 'index']);
+        Route::post('/users', [UserController::class, 'store']);
+        Route::patch('/users/{user}', [UserController::class, 'update']);
+        Route::delete('/users/{user}', [UserController::class, 'destroy']);
+    });
 });
 
-Route::get('/users', [UserController::class, 'index']);
-Route::post('/users', [UserController::class, 'store']);
-Route::patch('/users/{id}', [UserController::class, 'update']);
-Route::delete('/users/{id}', [UserController::class, 'destroy']);

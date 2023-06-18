@@ -32,6 +32,9 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
+# local env files
+.env*.local
+
 # vercel
 .vercel
 
@@ -152,6 +155,10 @@ fabric.properties
 # https://plugins.jetbrains.com/plugin/8053-azure-toolkit-for-intellij
 .idea/**/azureSettings.xml
 
+.env
+.env.backup
+.env.production
+.env.local
 Homestead.json
 Homestead.yaml
 auth.json

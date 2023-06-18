@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -42,6 +43,41 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Get the user's created_at date.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getCreatedAtAttribute($value)
+    {
+        return Carbon::parse($value)->format('Y-m-d H:i:s');
+    }
+
+    /**
+     * Get the user's updated_at date.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getUpdatedAtAttribute($value)
+    {
+        return Carbon::parse($value)->format('Y-m-d H:i:s');
+    }
+
+    public static function boot(){
+        parent::boot();
+        self::deleting(function($user){
+            $user->folders()->withTrashed()->each(function ($subfolder) {
+                $subfolder->forceDelete();
+            });
+
+            $user->files()->withTrashed()->each(function ($subfolder) {
+                $subfolder->forceDelete();
+            });
+        });
+    }
 
     public function files(): HasMany
     {

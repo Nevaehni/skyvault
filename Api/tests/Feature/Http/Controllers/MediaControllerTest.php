@@ -12,6 +12,7 @@ class MediaControllerTest extends TestCase
 {
     use RefreshDatabase;
 
+    // Subsection: Testing the index function
     public function testIndex()
     {
         $user = User::factory()->create();
@@ -26,6 +27,7 @@ class MediaControllerTest extends TestCase
         ]);
     }
 
+    // Subsection: Testing the getThumbnail function
     public function testGetThumbnail()
     {
         $user = User::factory()->create();
@@ -48,6 +50,7 @@ class MediaControllerTest extends TestCase
         $response->assertStatus(404);
     }
 
+    // Subsection: Testing the getImage function
     public function testGetImage()
     {
         $user = User::factory()->create();
@@ -70,6 +73,7 @@ class MediaControllerTest extends TestCase
         $response->assertStatus(404);
     }
 
+    // Subsection: Testing the getDeletedMedia function
     public function testGetDeletedMedia()
     {
         $user = User::factory()->create();

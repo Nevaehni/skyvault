@@ -51,6 +51,7 @@ namespace App\Models{
  * @property string $name
  * @property int|null $parent_id
  * @property int|null $user_id
+ * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\File> $files
@@ -59,15 +60,20 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Folder> $subfolders
  * @property-read int|null $subfolders_count
  * @property-read \App\Models\User|null $user
+ * @method static \Database\Factories\FolderFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Folder newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Folder newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Folder onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Folder query()
  * @method static \Illuminate\Database\Eloquent\Builder|Folder whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Folder whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Folder whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Folder whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Folder whereParentId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Folder whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Folder whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Folder withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Folder withoutTrashed()
  */
 	class Folder extends \Eloquent {}
 }
@@ -82,6 +88,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $password
  * @property string|null $remember_token
+ * @property int $is_admin
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\File> $files
@@ -104,6 +111,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereIsAdmin($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)

@@ -44,6 +44,21 @@ class FileController extends Controller
             'files.*' => 'required',
         ]);
 
+        $user = $request->user();
+
+        // Calculate the total size of the files being uploaded
+        $totalSize = array_sum(array_map(function ($file) {
+            return $file->getSize();
+        }, $request->file('files')));
+
+        // Convert the total size from bytes to megabytes
+        $totalSizeInMB = $totalSize / 1024 / 1024;
+
+        // Check if the user has enough storage available
+        if ($user->storage_used + $totalSizeInMB > $user->storage_limit) {
+            return response()->json(['message' => 'Storage limit exceeded'], 403);
+        }
+
         try {
             $this->fileService->createMediaFiles($request, $folderId);
 
@@ -53,6 +68,7 @@ class FileController extends Controller
             return response()->json(['message' => 'An error occurred while processing your request'], 500);
         }
     }
+
 
     /**
      * Show the form for creating a new resource.

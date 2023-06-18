@@ -8,23 +8,40 @@ use Illuminate\Http\Request;
 
 class FileService
 {
-    public function createMediaFiles(Request $request, $folderId): void
+    public function createMediaFiles(Request $request, $folderId)
     {
         // Get the authenticated user from the request object
         $user = $request->user();
 
+        // User's storage limit in MB
+        $storageLimit = $user->storage_limit;
+
         // Create a new File model for each uploaded file
         foreach ($request->file('files') as $uploadedFile) {
+            // Convert file size to MB
+            $fileSize = $uploadedFile->getSize();
+
+            // Check if the new file will exceed the user's storage limit
+            if ($user->storage_used + $fileSize > $storageLimit) {
+                // Stop the process and return a message
+                return response()->json(['message' => 'You have exceeded your storage limit.']);
+            }
+
             // Create a new File model for each uploaded file
             $file = new File();
             $file->user_id = $user->id;
             $file->folder_id = $folderId;
             $file->save();
-            
+
             // Add the media to the newly created File model
-            $file->addMedia($uploadedFile)->toMediaCollection(File::TEST_FOLDER_ALIAS);
+            $media = $file->addMedia($uploadedFile)->toMediaCollection(File::TEST_FOLDER_ALIAS);
+
+            // Increase the storage used by the user
+            $user->storage_used += $media->size;
+            $user->save();
         }
     }
+
 
     public function getFilesByFolderId($folderId)
     {

@@ -42,7 +42,7 @@ RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 # Set up Apache configuration
 COPY ./000-default.conf /etc/apache2/sites-available/000-default.conf
 
-# Expose port 8001
+# Expose port 8000
 EXPOSE 8001
 
 # Add wait-for-it script to the container

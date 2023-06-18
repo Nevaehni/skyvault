@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
+
 
 
 class UserController extends Controller
@@ -16,13 +19,6 @@ class UserController extends Controller
     {
         $users = User::all();
         return response()->json($users);
-    }
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -42,36 +38,33 @@ class UserController extends Controller
 
         return response()->json(['message' => 'User created successfully', 'user' => $user]);
     }
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, User $user)
     {
-        $request->validate([
-            'password' => 'required|min:6',
+
+        // Validate incoming data
+        $data = $request->validate([
+            'email' => ['sometimes', 'required', 'email', Rule::unique('users')->ignore($user->id)],
+            'password' => 'sometimes|required|min:6',
         ]);
 
-        $user->password = Hash::make($request->password);
+        // Update user's email and password if they were provided
+        if (isset($data['email'])) {
+            $user->email = $data['email'];
+        }
+
+        if (isset($data['password'])) {
+            $user->password = Hash::make($data['password']);
+        }
+
         $user->save();
 
-        return response()->json(['message' => 'Password updated successfully']);
+        return response()->json(['message' => 'User updated successfully', 'user' => $user]);
     }
+
 
     /**
      * Remove the specified resource from storage.

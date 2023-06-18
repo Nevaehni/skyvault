@@ -17,6 +17,13 @@ class File extends Model implements HasMedia
 
     const TEST_FOLDER_ALIAS = "test_files";
 
+    public static function boot(){
+        parent::boot();
+        self::deleting(function($file){
+            $file->media()->delete();
+        });
+    }
+
     public static function last()
     {
         return static::all()->last();

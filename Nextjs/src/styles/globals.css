@@ -1,0 +1,15 @@
+/* globals.css */
+
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+.__react_modal_image__modal_container {
+    @apply absolute !important;
+}
+
+.__react_modal_image__icon_menu {
+    display: inline-block;
+    float: right;
+    margin-top: 15px !important;
+}
