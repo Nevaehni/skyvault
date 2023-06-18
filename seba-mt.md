@@ -113,3 +113,4 @@ In order to refine the file handling system, the following techniques were used:
 - **React Image Loader**: A React component was integrated into the Next.js front-end. This enabled images and PDFs to be displayed directly within the web application, improving user interaction and experience.
 
 In conclusion, Sprint 4 successfully contributed to the Skyvault project by significantly improving the handling of image and PDF files. Each newly added feature was exhaustively tested and reviewed, guaranteeing optimal performance. I am eager to contribute more innovative features to Skyvault in the upcoming sprints.
+
