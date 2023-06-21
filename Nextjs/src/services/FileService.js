@@ -63,6 +63,14 @@ class FileService {
     static async deleteUser(id) {
         return await axios.delete(`/api/users/${id}`);
     }
+
+    // Filter API
+    static async getFilteredData(params) {
+        return await axios.get('/api/filter', { params });
+    }
+
+
+
 }
 
 export default FileService
