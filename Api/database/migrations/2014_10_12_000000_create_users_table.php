@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->boolean('is_admin')->default(false);
-            $table->integer('storage_limit')->default(5000); // added this line, setting default limit to 5000 (you can adjust this)
-            $table->integer('storage_used')->default(0); // added this line, setting default used storage to 0
+            $table->bigInteger('storage_limit')->default(100000000); // added this line, setting default limit to 5000 (you can adjust this)
+            $table->bigInteger('storage_used')->default(0); // added this line, setting default used storage to 0
             $table->timestamps();
         });
     }

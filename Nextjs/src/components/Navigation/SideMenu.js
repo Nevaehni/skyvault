@@ -3,7 +3,7 @@ import { useMediaQuery } from 'react-responsive'
 import Modal from '@/components/General/Modal'
 import FilesUploader from '@/components/FilesUploader'
 import FolderCreator from '@/components/FolderCreator'
-import { FaCloudUploadAlt } from 'react-icons/fa'
+import { FaCloudUploadAlt, FaFolderPlus } from 'react-icons/fa'
 
 const SideMenu = props => {
     const {
@@ -59,7 +59,7 @@ const SideMenu = props => {
             <div className="mx-auto py-6 sm:px-6 lg:px-8">
                 {isMobile ? (
                     <button
-                        className="py-2 px-4 w-full text-sky-50 border-2 shadow-neon shadow-green-500 rounded-md hover:shadow-neon-hover hover:shadow-green-500 transition-shadow duration-100"
+                        className="flex justify-center py-2 px-4 w-full text-sky-50 border-2 shadow-neon shadow-green-500 rounded-md hover:shadow-neon-hover hover:shadow-green-500 transition-shadow duration-100"
                         onClick={() => handleOpenModal('upload')}>
                         <FaCloudUploadAlt />
                     </button>
@@ -71,11 +71,19 @@ const SideMenu = props => {
                     </button>
                 )}
 
-                <button
-                    className="py-2 mt-2 px-4 w-full text-sky-50 border-2 shadow-neon shadow-blue-500 rounded-md hover:shadow-neon-hover hover:shadow-blue-500 transition-shadow duration-100"
-                    onClick={() => handleOpenModal('folder')}>
-                    Create folder
-                </button>
+                {isMobile ? (
+                    <button
+                        className="flex justify-center py-2 mt-2 px-4 w-full text-sky-50 border-2 shadow-neon shadow-blue-500 rounded-md hover:shadow-neon-hover hover:shadow-blue-500 transition-shadow duration-100"
+                        onClick={() => handleOpenModal('folder')}>
+                        <FaFolderPlus />
+                    </button>
+                ) : (
+                    <button
+                        className="py-2 mt-2 px-4 w-full text-sky-50 border-2 shadow-neon shadow-blue-500 rounded-md hover:shadow-neon-hover hover:shadow-blue-500 transition-shadow duration-100"
+                        onClick={() => handleOpenModal('folder')}>
+                        Create folder
+                    </button>
+                )}
 
                 <Modal
                     isOpen={isModalOpen}

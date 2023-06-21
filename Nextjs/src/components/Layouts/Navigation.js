@@ -44,15 +44,6 @@ const Navigation = ({ user: initialUser }) => {
                                   <ApplicationLogo className="block h-10 w-auto fill-current text-sky-50" />
                               </Link>
                           </div>
-
-                            {/* Navigation Links */}
-                            <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex text-sky-50">
-                                {/*<NavLink*/}
-                                {/*  href="/dashboard"*/}
-                                {/*  active={router.pathname === '/dashboard'}>*/}
-                                {/*    <span className="text-sky-50">Dashboard</span>*/}
-                                {/*</NavLink>*/}
-                            </div>
                         </div>
 
                         {/* Settings Dropdown */}
@@ -130,47 +121,29 @@ const Navigation = ({ user: initialUser }) => {
                 {/* Responsive Navigation Menu */}
                 {open && (
                     <div className="block sm:hidden">
-                        <div className="pt-2 pb-3 space-y-1">
-                            <ResponsiveNavLink
-                                href="/dashboard"
-                                active={router.pathname === '/dashboard'}>
-                                Dashboard
-                            </ResponsiveNavLink>
-                        </div>
 
                         {/* Responsive Settings Options */}
-                        <div className="pt-4 pb-1 border-t border-gray-200">
+                        <div className="pt-4 pb-1 border-gray-200">
                             <div className="flex items-center px-4">
-                                <div className="flex-shrink-0">
-                                    <svg
-                                        className="h-10 w-10 fill-current text-gray-400"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor">
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="2"
-                                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                                        />
-                                    </svg>
-                                </div>
-
-                                <div className="ml-3">
-                                    <div className="font-medium text-base text-gray-800">
+                                <div className="">
+                                    <div className="font-medium text-base text-sky-50">
                                         {user?.name}
-                                    </div>
-                                    <div className="font-medium text-sm text-gray-500">
-                                        {user?.email}
                                     </div>
                                 </div>
                             </div>
 
                             <div className="mt-3 space-y-1">
                                 {/* Authentication */}
+                                {user ? (
+                                  user.is_admin ? (
+                                    <ResponsiveNavButton onClick={goToAdminDashboard}>
+                                        <span className="text-sky-50">Admin Dashboard</span>
+                                    </ResponsiveNavButton>
+                                  ) : null
+                                ) : null}
+
                                 <ResponsiveNavButton onClick={logout}>
-                                    Logout
+                                    <span className="text-sky-50">Logout</span>
                                 </ResponsiveNavButton>
                             </div>
                         </div>

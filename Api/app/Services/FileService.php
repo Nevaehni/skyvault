@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\File;
 use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class FileService
 {
@@ -41,6 +42,7 @@ class FileService
             $user->save();
         }
     }
+
 
 
     public function getFilesByFolderId($folderId)

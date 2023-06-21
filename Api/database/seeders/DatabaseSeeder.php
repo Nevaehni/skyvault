@@ -19,11 +19,11 @@ class DatabaseSeeder extends Seeder
             'name' => 'John Doe',
             'email' => 'test@test.com',
             'password' => bcrypt('test@test.com'),
-            'is_admin' => '1',
+            'is_admin' => '1'
         ]);
 
         $user2 = User::create([
-            'name' => Faker\Factory::create()->name,
+            'name' => 'John Doe',
             'email' => 'test2@test.com',
             'password' => bcrypt('test2@test.com'),
         ]);
