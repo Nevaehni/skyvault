@@ -4,6 +4,7 @@ namespace App\Services\misc;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 class FilterQueryBuilder
 {
@@ -17,6 +18,8 @@ class FilterQueryBuilder
 
     private function applyArgsOnQuery(){
         $args = $this->args;
+
+        $this->queryBuilder->where('user_id', Auth::user()->id);
 
         if (array_key_exists('folder_id', $args)){
             $this->queryBuilder->where('folder_id', $args['folder_id']);
