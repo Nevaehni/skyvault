@@ -69,7 +69,9 @@ class FileService {
         return await axios.get('/api/filter', { params });
     }
 
-
+    static async getAllMediaTypes() {
+        return await axios.get('/api/media/types/all');
+    }
 
 }
 

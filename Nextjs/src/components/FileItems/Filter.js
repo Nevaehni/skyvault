@@ -1,9 +1,19 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { FaFilter } from 'react-icons/fa'
 import FileService from '@/services/FileService'
 import Dropdown from '@/components/Navigation/Dropdown'
 
 const Filter = ({ setFiles, filter, setFilter }) => {
+    const [mediaTypes, setMediaTypes] = useState([])
+
+    useEffect(() => {
+        FileService.getAllMediaTypes()
+            .then(response => {
+                setMediaTypes(Object.values(response.data))
+            })
+            .catch(err => console.error(err))
+    }, [])
+
     const handleFilter = async e => {
         e.preventDefault()
 
@@ -56,7 +66,7 @@ const Filter = ({ setFiles, filter, setFilter }) => {
                     value={filter.created_at}
                     onChange={handleChange}
                     placeholder="Created At"
-                    className="px-2 py-1 font-medium border-2 border-white shadow-neon shadow-yellow-300 rounded-md hover:shadow-neon-hover hover:shadow-yellow-300 transition-shadow duration-100 w-full mb-2 focus:ring-white focus:border-white text-gray-500"
+                    className="px-2 py-1 text-gray-900 font-medium border-2 border-white shadow-neon shadow-yellow-300 rounded-md hover:shadow-neon-hover hover:shadow-yellow-300 transition-shadow duration-100 w-full mb-2 focus:ring-white focus:border-white text-gray-500"
                 />
                 <input
                     type="text"
@@ -64,16 +74,22 @@ const Filter = ({ setFiles, filter, setFilter }) => {
                     value={filter.size}
                     onChange={handleChange}
                     placeholder="Size"
-                    className="px-2 py-1 font-medium border-2 border-white shadow-neon shadow-yellow-300 rounded-md hover:shadow-neon-hover hover:shadow-yellow-300 transition-shadow duration-100 w-full mb-2 focus:ring-white focus:border-white"
+                    className="px-2 py-1 text-gray-900 font-medium border-2 border-white shadow-neon shadow-yellow-300 rounded-md hover:shadow-neon-hover hover:shadow-yellow-300 transition-shadow duration-100 w-full mb-2 focus:ring-white focus:border-white"
                 />
-                <input
-                    type="text"
+                <select
                     name="type"
                     value={filter.type}
                     onChange={handleChange}
-                    placeholder="Type"
-                    className="px-2 py-1 font-medium border-2 border-white shadow-neon shadow-yellow-300 rounded-md hover:shadow-neon-hover hover:shadow-yellow-300 transition-shadow duration-100 w-full mb-2 focus:ring-white focus:border-white"
-                />
+                    className="px-2 py-1 text-gray-900 font-medium border-2 border-white shadow-neon shadow-yellow-300 rounded-md hover:shadow-neon-hover hover:shadow-yellow-300 transition-shadow duration-100 w-full mb-2 focus:ring-white focus:border-white">
+                    <option value="" disabled>
+                        Type
+                    </option>
+                    {mediaTypes.map((type, index) => (
+                        <option key={index} value={type}>
+                            {type}
+                        </option>
+                    ))}
+                </select>
                 <button
                     type="submit"
                     className="px-4 py-2 text-sky-50 font-medium border-2 shadow-neon shadow-green-500 rounded-md hover:shadow-neon-hover hover:shadow-green-500 transition-shadow duration-100">

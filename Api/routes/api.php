@@ -9,6 +9,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\FilterMediaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +31,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/media/{folderId?}', [MediaController::class, 'index']);
     Route::get('/media/thumbnail/{mediaId}', [MediaController::class, 'getThumbnail']);
     Route::get('/media/image/{mediaId}', [MediaController::class, 'getImage']);
+    Route::get('/media/types/all', function () {
+        return Media::all()->pluck('mime_type')->map(function ($value) {
+            return explode('/', $value)[0];
+        })->unique();
+    });
 
     //File routes
     Route::get('/files/download/{id}', [FileController::class, 'show']);
