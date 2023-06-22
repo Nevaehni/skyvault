@@ -31,6 +31,7 @@ const Index = () => {
             },
             { name: 'fetchAllSharedMedia', callback: fetchAllSharedMedia },
             { name: 'fetchAllSharedMedia', callback: fetchAllSharedMedia },
+            { name: 'fetchAllDeletedMedia', callback: fetchAllDeletedMedia },
         ]
 
         events.forEach(event => {
@@ -59,19 +60,19 @@ const Index = () => {
     const fetchAllMediaFolderItems = folderId =>
         fetchMedia(() => MediaService.getMediaFolderItems(folderId))
 
-    const handleSearch = async (searchTerm) => {
+    const handleSearch = async searchTerm => {
         if (searchTerm.trim() === '') {
             // Fetch all items
-            fetchAllMedia();
+            fetchAllMedia()
         } else {
-            const results = await FileService.searchFiles(searchTerm);
+            const results = await FileService.searchFiles(searchTerm)
             if (results?.data) {
-                setFiles(results.data);
+                setFiles(results.data)
             } else {
-                console.log('No search results');
+                console.log('No search results')
             }
         }
-    };
+    }
 
     return (
         <AppLayout
@@ -89,16 +90,18 @@ const Index = () => {
                 <title>Dashboard</title>
             </Head>
             <div className="py-12">
-                {alert.show && (
-                    <div className="mb-4">
-                        <Alert
-                            type={alert.type}
-                            message={alert.message}
-                            onClose={() => setAlert({ ...alert, show: false })}
-                        />
-                    </div>
-                )}
                 <div className="mx-auto sm:px-6 lg:px-8">
+                    {alert.show && (
+                        <div className="mb-4">
+                            <Alert
+                                type={alert.type}
+                                message={alert.message}
+                                onClose={() =>
+                                    setAlert({ ...alert, show: false })
+                                }
+                            />
+                        </div>
+                    )}
                     <div className="flex justify-between mb-4">
                         <div className="flex items-center p-3 text-sky-50 font-medium">
                             <Filter

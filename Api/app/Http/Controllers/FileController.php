@@ -153,6 +153,7 @@ class FileController extends Controller
         if (auth()->id() !== $file->user_id) {
             abort(403, 'Unauthorized action.');
         }
+        $file->media()->delete();
 
         $file->forceDelete();
     }

@@ -94,13 +94,12 @@ const FunctionButtons = ({ isOwner, viewingDeletedMedia }) => {
 
     return (
         <div className="text-gray-500 text-right">
-            <MoveToFolderButton />
+            <MoveToFolderButton viewingDeletedMedia={viewingDeletedMedia} />
             <DownloadButton />
             {/* Conditionally render TrashButton and ShareButton if the user is the owner */}
             {isOwner && !viewingDeletedMedia ? (
                 <>
                     <TrashButton />
-                    <ShareButton />
                 </>
             ) : (
                 <>
@@ -114,8 +113,13 @@ const FunctionButtons = ({ isOwner, viewingDeletedMedia }) => {
     )
 }
 
-const MoveToFolderButton = () => {
+const MoveToFolderButton = ({ viewingDeletedMedia }) => {
     const { toggleModal, setTarget } = useContext(FolderContext)
+
+    // Return null (don't render the button) when viewingDeletedMedia is true
+    if (viewingDeletedMedia) {
+        return null
+    }
 
     return (
         <button

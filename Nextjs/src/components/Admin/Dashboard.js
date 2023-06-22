@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 import FileService from '@/services/FileService'
-import Modal from '@/components/General/Modal'
+import CreateUserForm from '@/components/Admin/CreateUser'
+import EditUserForm from '@/components/Admin/EditUser'
 
 const Dashboard = () => {
     const [users, setUsers] = useState([])
-    const [isModalOpen, setModalOpen] = useState(false)
-    const [currentEditingUser, setCurrentEditingUser] = useState(null) // track user being edited
+    const [currentEditingUser, setCurrentEditingUser] = useState(null)
+    const [isCreateModalOpen, setCreateModalOpen] = useState(false)
+    const [isEditModalOpen, setEditModalOpen] = useState(false)
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -16,148 +19,70 @@ const Dashboard = () => {
         fetchUsers()
     }, [])
 
-    const openModal = () => {
-        setModalOpen(true)
+    const handleDeleteUser = async id => {
+        if (window.confirm('Are you sure you want to delete this user?')) {
+            await FileService.deleteUser(id)
+            setUsers(users.filter(user => user.id !== id))
+        }
     }
 
-    const closeModal = () => {
-        setModalOpen(false)
+
+    const router = useRouter()
+
+    const handleBack = () => {
+        router.push('/dashboard')
+    }
+
+    const handleCreateUser = async formData => {
+        try {
+            const response = await FileService.createUser(formData)
+            setUsers([...users, response.data.user])
+            setCreateModalOpen(false)
+        } catch (error) {
+            console.log('User creation failed:', error.response.data)
+        }
+    }
+
+    const handleEditUser = async formData => {
+        try {
+            const response = await FileService.updateUser(
+                currentEditingUser.id,
+                formData,
+            )
+            setUsers(
+                users.map(user =>
+                    user.id === currentEditingUser.id
+                        ? response.data.user
+                        : user,
+                ),
+            )
+            setCurrentEditingUser(null)
+            setEditModalOpen(false)
+        } catch (error) {
+            console.log('User update failed:', error.response.data)
+        }
     }
 
     const openEditUserModal = user => {
         setCurrentEditingUser(user)
-        openModal()
+        setEditModalOpen(true)
     }
-
-    const [userForm, setUserForm] = useState({
-        name: '',
-        email: '',
-        password: '',
-        storage_limit: '',
-        storage_used: '',
-    })
-
-    const handleDeleteUser = async id => {
-        await FileService.deleteUser(id)
-        setUsers(users.filter(user => user.id !== id))
-    }
-
-    const handleChange = e => {
-        setUserForm({ ...userForm, [e.target.name]: e.target.value })
-    }
-
-    const handleSubmit = async e => {
-        e.preventDefault()
-        try {
-            let response
-            if (currentEditingUser) {
-                response = await FileService.updateUser(
-                    currentEditingUser.id,
-                    userForm,
-                )
-                setUsers(
-                    users.map(user =>
-                        user.id === currentEditingUser.id
-                            ? response.data.user
-                            : user,
-                    ),
-                )
-            } else {
-                response = await FileService.createUser(userForm)
-                setUsers([...users, response.data.user])
-            }
-            setUserForm({
-                name: '',
-                email: '',
-                password: '',
-                storage_limit: '',
-                storage_used: '',
-            })
-            closeModal()
-        } catch (error) {
-            console.log('User action failed:', error.response.data)
-        }
-    }
-
-    useEffect(() => {
-        if (currentEditingUser) {
-            setUserForm({
-                name: currentEditingUser.name,
-                email: currentEditingUser.email,
-                password: '',
-                storage_limit: currentEditingUser.storage_limit,
-                storage_used: currentEditingUser.storage_used,
-            })
-        }
-    }, [currentEditingUser])
 
     return (
         <div className="py-12">
-            <Modal
-                isOpen={isModalOpen}
-                onClose={closeModal}
-                title={currentEditingUser ? 'Edit User' : 'Create User'}>
-                <form onSubmit={handleSubmit}>
-                    <div className="mb-4">
-                        <label
-                            className="block text-grey-darker text-sm font-bold mb-2"
-                            htmlFor="name">
-                            Name
-                        </label>
-                        <input
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
-                            id="name"
-                            name="name"
-                            type="text"
-                            placeholder="Name"
-                            value={userForm.name}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    <div className="mb-4">
-                        <label
-                            className="block text-grey-darker text-sm font-bold mb-2"
-                            htmlFor="email">
-                            Email
-                        </label>
-                        <input
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
-                            id="email"
-                            name="email"
-                            type="email"
-                            placeholder="Email"
-                            value={userForm.email}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    <div className="mb-4">
-                        <label
-                            className="block text-grey-darker text-sm font-bold mb-2"
-                            htmlFor="password">
-                            Password
-                        </label>
-                        <input
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
-                            id="password"
-                            name="password"
-                            type="password"
-                            placeholder="Password"
-                            value={userForm.password}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    <div className="flex items-center justify-between">
-                        <button
-                            className="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 rounded"
-                            type="submit">
-                            Submit
-                        </button>
-                    </div>
-                </form>
-            </Modal>
+            <CreateUserForm
+                isOpen={isCreateModalOpen}
+                onClose={() => setCreateModalOpen(false)}
+                onSubmit={handleCreateUser}
+            />
+
+            <EditUserForm
+                isOpen={isEditModalOpen}
+                onClose={() => setEditModalOpen(false)}
+                onSubmit={handleEditUser}
+                user={currentEditingUser}
+            />
+
             <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div className="overflow-hidden shadow-sm sm:rounded-lg">
                     <div className="p-6 bg-gray-800">
@@ -166,11 +91,12 @@ const Dashboard = () => {
                                 Admin Dashboard
                             </h3>
                             <button
-                                onClick={openModal}
+                                onClick={() => setCreateModalOpen(true)}
                                 className="px-4 py-2 text-sky-50 font-medium border-2 shadow-neon shadow-green-500 rounded-md hover:shadow-neon-hover hover:shadow-green-500 transition-shadow duration-100">
                                 Create User
                             </button>
                         </div>
+                        {/* Rest of the UI elements go here... */}
                         <div className="mt-5 flex flex-col">
                             <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                                 <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -261,6 +187,11 @@ const Dashboard = () => {
                                             </tbody>
                                         </table>
                                     </div>
+                                    <button
+                                        onClick={handleBack}
+                                        className="px-4 py-2 mr-2 text-sky-50 font-medium border-2 shadow-neon shadow-blue-500 rounded-md hover:shadow-neon-hover hover:shadow-blue-500 transition-shadow duration-100 mt-4">
+                                        Back
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -270,4 +201,5 @@ const Dashboard = () => {
         </div>
     )
 }
+
 export default Dashboard

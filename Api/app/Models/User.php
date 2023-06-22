@@ -23,6 +23,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'storage_limit',
     ];
 
     /**
@@ -73,8 +74,9 @@ class User extends Authenticatable
                 $subfolder->forceDelete();
             });
 
-            $user->files()->withTrashed()->each(function ($subfolder) {
-                $subfolder->forceDelete();
+            $user->files()->withTrashed()->each(function ($file) {
+                $file->media()->delete();
+                $file->forceDelete();
             });
         });
     }

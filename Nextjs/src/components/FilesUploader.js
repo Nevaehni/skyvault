@@ -10,8 +10,19 @@ export default function FilesUploader(props) {
 
     const handleFileChange = event => {
         const fileList = Array.from(event.target.files)
-        setFiles(fileList)
+        const maxSize = 1048576 * 10; // 10MB
+        let isExceeded = false;
+
+        fileList.forEach(file => {
+            if (file.size > maxSize) {
+                isExceeded = true;
+                alert('File size exceeds the 10 MB limit. Please choose a smaller file.');
+            }
+        });
+
+        if (!isExceeded) setFiles(fileList);
     }
+
 
     const csrf = () => axios.get('/sanctum/csrf-cookie')
 
@@ -97,7 +108,7 @@ export default function FilesUploader(props) {
                         </div>
                     ))}
                 </div>
-
+                <div className="text-sky-50 py-2">Max 10 MB upload limit</div>
                 <div className="relative border-2 border-gray-600 rounded-md p-4 text-gray-400">
                     <input
                         type="file"

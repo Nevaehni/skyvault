@@ -44,7 +44,6 @@ class MediaService
     {
         $folders = $this->folderService->getDeletedFolders();
         $files = $this->fileService->getDeletedFiles();
-
         $response['subfolders'] = new FoldersResource($folders);
         $response['files'] = new FilesResource($files);
 

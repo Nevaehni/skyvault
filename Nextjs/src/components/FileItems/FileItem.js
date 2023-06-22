@@ -95,7 +95,7 @@ const FunctionButtons = ({ isOwner, viewingDeletedMedia }) => {
 
     return (
         <div className="text-gray-500 text-right">
-            <MoveToFolderButton />
+            {!viewingDeletedMedia && <MoveToFolderButton />}
             <DownloadButton />
             {isOwner && !viewingDeletedMedia ? (
                 <>

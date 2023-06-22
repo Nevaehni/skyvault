@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\File;
 use Auth;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class FileService
 {
@@ -44,7 +43,6 @@ class FileService
     }
 
 
-
     public function getFilesByFolderId($folderId)
     {
         return Auth::user()
@@ -75,6 +73,7 @@ class FileService
 
     public function getDeletedFiles()
     {
+//        dd(File::onlyTrashed()->get());
         return File::onlyTrashed()
             ->where('user_id', Auth::id())
             ->get()
